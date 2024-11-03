@@ -1,0 +1,10 @@
+controllers:
+  resource:
+    path: ../src/Controller/
+    namespace: App\Controller
+  type: attribute
+
+  # maniere simple pour Routing
+# home:
+#   path: /
+#   controller: App\Controller\HomeController::index
