@@ -13,7 +13,7 @@ class RecipeController extends AbstractController
     #[Route('/recette', name: 'recipe.index')]
     public function index(Request $request): Response
     {
-        return new Response('Recette');
+        return $this->render('recipe/index.html.twig');
     }
 
     #[Route('/recette/{slug}-{id}', name: 'recipe.show', requirements: ['slug' => '[a-z0-9-]+', 'id' => '\d+'])]
@@ -27,9 +27,14 @@ class RecipeController extends AbstractController
         // return new Response('Recette ' . $slug);
         
         // format JSON
-        return new JsonResponse([
+        // return new JsonResponse([
             // ou $this->json(['slug' => $slug])
-            'slug' => $slug
+            // 'slug' => $slug
+        // ]);
+        return $this->render('recipe/index.html.twig', [
+            'slug' => $slug,
+            'id' => $id
         ]);
+
     }
 }

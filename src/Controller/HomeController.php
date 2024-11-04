@@ -16,6 +16,8 @@ class HomeController extends AbstractController
     // Maniere d'obtenir le parametre de l'URL ('http://localhost:8000/?city=Paris)
         // return new Response('WOLOLO' . ' ' . $_GET['city']);
     // Autre maniere d'obtenir le parametre de l'URL ('http://localhost:8000/?city=Paris) avec une valeur par default
-        return new Response('WOLOLO' . ' ' . $request->query->get('city', 'Ramses'));
+        // return new Response('WOLOLO' . ' ' . $request->query->get('city', 'Ra'));
+
+        return $this->render('home/index.html.twig');
     }
 }
