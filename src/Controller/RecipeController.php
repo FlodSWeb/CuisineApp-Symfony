@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RecipeController extends AbstractController
 {
-    #[Route('/recette', name: 'recipe.index')]
+    #[Route('/recettes', name: 'recipe.index')]
     public function index(Request $request): Response
     {
         return $this->render('recipe/index.html.twig');
@@ -28,10 +28,10 @@ class RecipeController extends AbstractController
         
         // format JSON
         // return new JsonResponse([
-            // ou $this->json(['slug' => $slug])
-            // 'slug' => $slug
+        //      $this->json(['slug' => $slug]),
+        //     'slug' => $slug
         // ]);
-        return $this->render('recipe/index.html.twig', [
+        return $this->render('recipe/show.html.twig', [
             'slug' => $slug,
             'id' => $id
         ]);

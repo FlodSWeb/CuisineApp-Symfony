@@ -10,13 +10,13 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomeController extends AbstractController
 {
     #[Route("/", name: "home")]
-    function index (Request $request) : Response {
-        // dd($request);
-        // return new Response('WOLOLO');
+    function index(Request $request): Response {
+        dump($request);
+        // return new Response('Hello');
     // Maniere d'obtenir le parametre de l'URL ('http://localhost:8000/?city=Paris)
-        // return new Response('WOLOLO' . ' ' . $_GET['city']);
+        // return new Response('Hello' . ' ' . $_GET['city']);
     // Autre maniere d'obtenir le parametre de l'URL ('http://localhost:8000/?city=Paris) avec une valeur par default
-        // return new Response('WOLOLO' . ' ' . $request->query->get('city', 'Ra'));
+        // return new Response('Hello' . ' ' . $request->query->get('city', 'Ra'));
 
         return $this->render('home/index.html.twig');
     }

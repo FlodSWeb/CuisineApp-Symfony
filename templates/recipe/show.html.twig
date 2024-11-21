@@ -1,7 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Recettes{% endblock %}
+{% block title "Recettes " ~ slug %}
 
 {% block body %}
-    <h1>SHOW</h1>
+    <h1>SHOW recettes</h1>
+    <ul>
+        <li>
+            <a href="{{ url('recipe.show', {id, slug}) }}">{{slug | upper}}</a>
+        </li>
+    </ul>
 {% endblock %}
