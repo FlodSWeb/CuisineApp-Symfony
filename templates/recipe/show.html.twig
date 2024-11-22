@@ -1,12 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title "Recettes " ~ slug %}
+{% block title "Recettes " ~ recipe.title %}
 
 {% block body %}
-    <h1>SHOW recettes</h1>
-    <ul>
+    <h1>Recette de {{recipe.title}}</h1>
+    {# <ul>
         <li>
             <a href="{{ url('recipe.show', {id, slug}) }}">{{slug | upper}}</a>
         </li>
-    </ul>
+    </ul> #}
+    <h4>Durée : {{recipe.duration}}mn</h4>
+    <p>{{recipe.content | nl2br}}</p>
 {% endblock %}
