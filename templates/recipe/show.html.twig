@@ -11,4 +11,6 @@
     </ul> #}
     <h4>Durée : {{recipe.duration}}mn</h4>
     <p>{{recipe.content | nl2br}}</p>
+
+  <a href="{{ url('recipe.edit', {id: recipe.id})}}" class="btn btn-primary">Modifier</a>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Recipe;
+use App\Form\RecipeType;
 use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,10 +17,10 @@ class RecipeController extends AbstractController
     #[Route('/recettes', name: 'recipe.index')]
     public function index(Request $request, RecipeRepository $recipeRepository, EntityManagerInterface $em): Response
     {
-        dd($recipeRepository->findTotalDuration());
-
+        
         $recipes = $recipeRepository->findAll();
         // $recipes = $recipeRepository->findWithDurationLowerThan(10);
+        // dd($recipeRepository->findTotalDuration());
         // dd($recipes);
 
         // Creer une recette
@@ -27,8 +28,8 @@ class RecipeController extends AbstractController
 //         $recipe->setTitle('Chili con carne');
 //         $recipe->setSlug('chili-con-carne');
 //         $recipe->setContent('Ingrédients (pour 4 personnes) :
-// 500 g de bœuf haché
-// 1 boîte de 400 g de tomates ....');
+//         500 g de bœuf haché
+//         1 boîte de 400 g de tomates ....');
 //         $recipe->setCreatedAt(new \DateTimeImmutable('now'));
 //         $recipe->setUpdatedAt(new \DateTimeImmutable('now'));
 //         $recipe->setDuration(25);
@@ -48,8 +49,8 @@ class RecipeController extends AbstractController
     #[Route('/recette/{slug}-{id}', name: 'recipe.show', requirements: ['slug' => '[a-z0-9-]+', 'id' => '\d+'])]
     public function show(Request $request, string $slug, int $id, RecipeRepository $recipeRepository): Response
     {
-        // $recipe = $recipeRepository->findOneBy(['slug' => $slug]);
-        $recipe = $recipeRepository->find($id);
+        $recipe = $recipeRepository->findOneBy(['slug' => $slug]);
+        // $recipe = $recipeRepository->find($id);
         if ($recipe->getSlug() !== $slug) {
             return $this->redirectToRoute('recipe.show', ['slug' => $recipe->getSlug(), 'id' => $recipe->getId()]);
         }
@@ -71,5 +72,20 @@ class RecipeController extends AbstractController
         //     'slug' => $slug
         // ]);
        
+    }
+
+    #[Route('/recettes/{id}/edit', name: 'recipe.edit')]
+    public function edit(Recipe $recipe, Request $request, EntityManagerInterface $em) {
+        $form = $this->createForm(RecipeType::class, $recipe);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            $this->addFlash('success', 'La recette a bien été mise à jour.');
+            return $this->redirectToRoute('recipe.index');
+        }
+        return $this->render('recipe/edit.html.twig', [
+            'recipe' => $recipe,
+            'form' => $form
+        ]);
     }
 }

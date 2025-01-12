@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title "Recettes " ~ recipe.title %}
+
+{% block body %}
+    <h1>Recette de {{recipe.title}}</h1>
+    {{ form(form) }}
+
+    {# ou pour controler les champs plus directement #}
+    {# {{ form_start(form) }}
+        <div class="d-flex">
+            {{ form_row(form.title) }}
+            {{ form_row(form.duration) }}
+        </div>
+    {{ form_rest(form) }}
+    {{ form_end(form) }} #}
+{% endblock %}

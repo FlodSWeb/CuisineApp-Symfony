@@ -11,7 +11,7 @@ class HomeController extends AbstractController
 {
     #[Route("/", name: "home")]
     function index(Request $request): Response {
-        dump($request);
+        // dump($request);
         // return new Response('Hello');
     // Maniere d'obtenir le parametre de l'URL ('http://localhost:8000/?city=Paris)
         // return new Response('Hello' . ' ' . $_GET['city']);
