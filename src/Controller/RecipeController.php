@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class RecipeController extends AbstractController
 {
@@ -46,7 +47,7 @@ class RecipeController extends AbstractController
         ]);
     }
 
-    #[Route('/recette/{slug}-{id}', name: 'recipe.show', requirements: ['slug' => '[a-z0-9-]+', 'id' => '\d+'])]
+    #[Route('/recette/{slug}-{id}', name: 'recipe.show', requirements: ['slug' => '[A-Za-z0-9-]+', 'id' => '\d+'])]
     public function show(Request $request, string $slug, int $id, RecipeRepository $recipeRepository): Response
     {
         $recipe = $recipeRepository->findOneBy(['slug' => $slug]);
@@ -74,11 +75,12 @@ class RecipeController extends AbstractController
        
     }
 
-    #[Route('/recettes/{id}/edit', name: 'recipe.edit')]
+    #[Route('/recettes/{id}/edit', name: 'recipe.edit', methods: ['GET', 'POST'])]
     public function edit(Recipe $recipe, Request $request, EntityManagerInterface $em) {
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            // $recipe->setUpdatedAt(new \DateTimeImmutable());
             $em->flush();
             $this->addFlash('success', 'La recette a bien été mise à jour.');
             return $this->redirectToRoute('recipe.index');
@@ -87,5 +89,33 @@ class RecipeController extends AbstractController
             'recipe' => $recipe,
             'form' => $form
         ]);
+    }
+
+    #[Route('/recettes/new', name: 'recipe.new')]
+    public function create(Request $request, EntityManagerInterface $em) {
+        $recipe = new Recipe();
+        $form = $this->createForm(RecipeType::class, $recipe);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isvalid()) {
+            // Parametrage du slug et des DateTimesdans RecipeType.php
+            // $recipe->setCreatedAt(new \DateTimeImmutable());
+            // $recipe->setUpdatedAt(new \DateTimeImmutable());
+            $em->persist($recipe);
+            $em->flush();
+            $this->addFlash('success', 'La recette a bien été ajoutée.');
+            return $this->redirectToRoute('recipe.index');
+        }
+        return $this->render('recipe/new.html.twig', [
+            'form' => $form
+        ]);
+    }
+
+    #[Route('/recettes/{id}/delete', name: 'recipe.delete', methods: ['POST'])]
+    public function remove(Recipe $recipe, EntityManagerInterface $em) {
+        // dd($recipe);
+        $em->remove($recipe);
+        $em->flush();
+        $this->addFlash('success', 'La recette a bien été supprimée.');
+        return $this->redirectToRoute('recipe.index');
     }
 }

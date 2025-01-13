@@ -12,5 +12,11 @@
     <h4>Durée : {{recipe.duration}}mn</h4>
     <p>{{recipe.content | nl2br}}</p>
 
-  <a href="{{ url('recipe.edit', {id: recipe.id})}}" class="btn btn-primary">Modifier</a>
+    <div class="d-flex gap-1">
+        <a href="{{ url('recipe.edit', {id: recipe.id})}}" class="btn btn-warning">Modifier</a>
+        <form action="{{ path('recipe.delete', {id: recipe.id}) }}" method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="btn btn-danger">Supprimer</button>
+        </form>
+    </div>
 {% endblock %}
