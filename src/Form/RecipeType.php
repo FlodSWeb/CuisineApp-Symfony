@@ -12,6 +12,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Sequentially;
 
 class RecipeType extends AbstractType
 {
@@ -19,10 +22,16 @@ class RecipeType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
+                'empty_data' => '',
                 'label' => 'Nom de la recette'
             ])
             ->add('slug', TextType::class, [
-                'required' => false
+                'required' => false,
+                // contraintes parametrees au niveau de l'entite Recipe.php
+                // 'constraints' => new Sequentially([
+                //         new Length(min: 4, max: 60, minMessage: 'Le slug doit contenir au moins 2 caractères.', maxMessage: 'Le slug doit contenir au plus 60 caractères.'),
+                //         new Regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', message: 'Le slug doit contenir uniquement des lettres minuscules, des chiffres et des tirets.')
+                //         ])
             ])
             ->add('content', TextType::class, [
                 'label' => 'Contenu de la recette'
@@ -62,6 +71,7 @@ class RecipeType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Recipe::class,
+            'validation_groups' => ['default', 'Extra']
         ]);
     }
 }
