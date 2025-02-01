@@ -1,1 +1,4 @@
 php -S localhost:8000 -t public
+
+Mailpit : \CuisineApp\bin>mailpit 
+->port 8025
