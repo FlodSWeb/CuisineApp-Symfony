@@ -19,26 +19,28 @@ class ContactController extends AbstractController
 
         $data = new ContactDTO();
 
-        $data->name = 'Wololo';
-        $data->email = 'WololoPower@mail.com';
-        $data->message = 'WOLOLO POWAAAAA';
+        $data->name = '';
+        $data->email = '';
+        $data->message = '';
+        $data->service = '';
 
         $form = $this->createForm(ContactType::class, $data);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $email = (new TemplatedEmail())
-                ->from($data->email)
-                ->to('floriands09@gmail.com')
-                ->subject('Test mail Cuisine App')
+            try {
+                $email = (new TemplatedEmail())
+                    ->from($data->email)
+                    ->to($data->service)
+                    ->subject('Test mail Cuisine App')
+                    ->htmlTemplate('emails/contact.html.twig')                
+                    ->context(['data' => $data]);
 
-                ->htmlTemplate('emails/contact.html.twig')
-                
-                ->context(['data' => $data]);
-
-                $mailer->send($email);
-                $this->addFlash('success', 'Message envoyé !');
-
-                return $this->redirectToRoute('contact');                
+                    $mailer->send($email);
+                    $this->addFlash('success', 'Message envoyé !');
+                    return $this->redirectToRoute('contact');    
+                } catch (\Exception $e) {
+                    $this->addFlash('danger', 'Impossible d\'envoyer le mail !');
+                }                           
         }
         return $this->render('contact/contact.html.twig', [
             'form' => $form,
