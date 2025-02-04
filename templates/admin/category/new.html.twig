@@ -1,0 +1,21 @@
+{% extends "admin/admin.html.twig" %}
+
+{% block title 'Créer une catégorie' %}
+
+{% block body %}
+
+<h1>Créer une catégorie</h1>    
+
+{{ form(form) }}
+
+
+<div class="container-xl mt-5 border border-warning-subtle bg-light-subtle">
+<h2>Catégories : </h2>
+   {% for category in categories %}
+    <ul>
+        <li>{{ category.name }}</li>
+    </ul>
+   {% endfor %}
+</div>
+
+{% endblock %}

@@ -4,5 +4,14 @@
 
 {% block body %}
 <h2>Accueil</h2>
-<p>Bienvenue sur CuisineApp</p>
+<p>Page d'accueil</p>
+
+<ul>
+    <li>
+        <a href="{{ url('admin.recipe.index') }}">Recettes</a>
+    </li>
+    <li>
+        <a href="{{ url('admin.category.index') }}">Catégories</a>
+    </li>
+</ul>
 {% endblock %}
