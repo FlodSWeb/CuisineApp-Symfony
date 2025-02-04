@@ -37,8 +37,9 @@ class ContactController extends AbstractController
 
                     $mailer->send($email);
                     $this->addFlash('success', 'Message envoyé !');
+                    
                     return $this->redirectToRoute('contact');    
-                } catch (\Exception $e) {
+            } catch (\Exception $e) {
                     $this->addFlash('danger', 'Impossible d\'envoyer le mail !');
                 }                           
         }
