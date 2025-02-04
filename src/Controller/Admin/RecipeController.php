@@ -46,18 +46,19 @@ class RecipeController extends AbstractController
     }
 
     // supprimee ("Commit Category")
-    // #[Route('/{slug}-{id}', name: 'show', requirements: ['slug' => '[A-Za-z0-9-]+', 'id' => '\d+'])]
-    // public function show(Request $request, string $slug, int $id, RecipeRepository $recipeRepository): Response
-    // {
-    //     $recipe = $recipeRepository->findOneBy(['slug' => $slug]);
-    //     // $recipe = $recipeRepository->find($id);
-    //     if ($recipe->getSlug() !== $slug) {
-    //         return $this->redirectToRoute('recipe.show', ['slug' => $recipe->getSlug(), 'id' => $recipe->getId()]);
-    //     }
+    #[Route('/{slug}-{id}', name: 'show', requirements: ['slug' => '[A-Za-z0-9-]+', 'id' => '\d+'])]
+    public function show(Request $request, string $slug, int $id, RecipeRepository $recipeRepository): Response
+    {
+        $recipe = $recipeRepository->findOneBy(['slug' => $slug]);
+        // $recipe = $recipeRepository->find($id);
+        if ($recipe->getSlug() !== $slug) {
+            return $this->redirectToRoute('admin.recipe.show', ['slug' => $recipe->getSlug(), 'id' => $recipe->getId()]);
+        }
 
-    //     return $this->render('recipe/show.html.twig', [
-    //         'recipe' => $recipe
-    //     ]);
+        return $this->render('admin/recipe/show.html.twig', [
+            'recipe' => $recipe
+        ]);
+    }
 
         // URL : http://localhost:8000/recette/hamburger-bacon-37
         // dd($request);
