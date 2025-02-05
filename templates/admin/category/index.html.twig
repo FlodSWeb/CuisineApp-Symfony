@@ -12,7 +12,7 @@
         <thead>
             <tr>
                 <th>Nom</th>
-                <th>Actions</th>
+                <th style="width: 200px">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -21,15 +21,15 @@
             <td>{{ category.name }}</td>
             <td>
                 <div class="d-flex gap-1">
-                <a class="btn btn-warning btn-sm" href="{{ path('admin.category.edit', {id: category.id}) }}">Modifier</a>
-                <form action="{{ path('admin.category.delete', {id: category.id}) }}" method="post">
-                <input type="hidden" name="_method" value="DELETE">
-                    <button class="btn btn-danger btn-sm" type="submit">Supprimer</button>
-                </form>
+                    <a class="btn btn-warning btn-sm" href="{{ path('admin.category.edit', {id: category.id}) }}">Modifier</a>
+
+                    <form method="post" action="{{ path('admin.category.delete', {id: category.id}) }}">
+                        <input type="hidden" name="_method" value="DELETE"/>
+                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
                 </div>
             </td>
         </tr>
-
         {% endfor %}
 
         </tbody>

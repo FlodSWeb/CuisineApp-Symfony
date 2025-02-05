@@ -32,12 +32,12 @@ class CategoryController extends AbstractController {
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($category);
             $em->flush();
-            $this->addFlash('success', 'La categorie a bien ajoutée.');
+            $this->addFlash('success', 'La catégorie a bien ajoutée.');
 
             return $this->redirectToRoute('admin.category.index');
         }
         return $this->render('admin/category/new.html.twig', [
-            'form' => $form,
+            'form' => $form->createView(),
             'categories' => $repository->findAll()
         ]);
     }
@@ -57,13 +57,13 @@ class CategoryController extends AbstractController {
         return $this->render('admin/category/edit.html.twig', [
             'category' => $category,
             'categories' => $repository->findAll(),
-            'form' => $form
+            'form' => $form->createView()
         ]);
     }
     
     
-    #[Route('/{id}', name: 'delete', requirements: ['id' => Requirement::DIGITS], methods: ['DELETE'])]
-    public function delete(Category $category, EntityManagerInterface $em)
+    #[Route('/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::DIGITS])]
+    public function remove(Category $category, EntityManagerInterface $em)
     {
         $em->remove($category);
         $em->flush();
