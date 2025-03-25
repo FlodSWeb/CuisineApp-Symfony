@@ -44,7 +44,7 @@ class Recipe
     #[Assert\Positive(message: 'La durée doit être positive.')]
     private ?int $duration = null;
 
-    #[ORM\ManyToOne(inversedBy: 'recipes')]
+    #[ORM\ManyToOne(inversedBy: 'recipes', cascade: ['persist'])]
     private ?Category $category = null;
 
     public function getId(): ?int
