@@ -10,8 +10,11 @@
         </li>
     </ul> #}
     <h4>Durée : {{recipe.duration}}mn</h4>
+    {# <span>
+        <img src="/images/recipes/{{recipe.thumbnail}}" class="rounded img-thumbnail" alt="">
+    </span> #}
+    <img src="{{ vich_uploader_asset(recipe, 'thumbnailFile')}}" class="rounded img-thumbnail" alt="">
     <p>{{recipe.content | nl2br}}</p>
-
     <div class="d-flex gap-1">
         <a href="{{ url('admin.recipe.edit', {id: recipe.id})}}" class="btn btn-warning">Modifier</a>
         <form action="{{ path('admin.recipe.delete', {id: recipe.id}) }}" method="post">

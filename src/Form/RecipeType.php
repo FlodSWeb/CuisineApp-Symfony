@@ -6,15 +6,14 @@ use App\Entity\Category;
 use App\Entity\Recipe;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Event\PostSubmitEvent;
-use Symfony\Component\Form\Event\PreSubmitEvent;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\Validator\Constraints\Image;
 
 class RecipeType extends AbstractType
 {
@@ -38,6 +37,15 @@ class RecipeType extends AbstractType
                 //         new Length(min: 4, max: 60, minMessage: 'Le slug doit contenir au moins 2 caractères.', maxMessage: 'Le slug doit contenir au plus 60 caractères.'),
                 //         new Regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', message: 'Le slug doit contenir uniquement des lettres minuscules, des chiffres et des tirets.')
                 //         ])
+            ])
+            ->add('thumbnailFile', FileType::class, [
+                'label' => 'Image',
+                'required' => false
+                // Avec Vich, plus besoin de ces attributs
+                // 'mapped' => false,
+                // 'constraints' => [
+                //     new Image()
+                // ]
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,

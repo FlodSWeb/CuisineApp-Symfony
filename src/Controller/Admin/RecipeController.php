@@ -81,9 +81,17 @@ class RecipeController extends AbstractController
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // $recipe->setUpdatedAt(new \DateTimeImmutable());
+            // Sans VichUploaderBundle
+            // /** @var UploadedFile $file */
+            // $file = $form->get('thumbnailFile')->getData();
+            // $fileName = $recipe->getSlug() . '.' . $recipe->getId() . '.' . $file->getClientOriginalExtension();
+            // $file->move($this->getParameter('kernel.project_dir') . '/public/recipes/images', $fileName);
+            // $recipe->setThumbnail($fileName);
+            // $em->flush();
+            
             $em->flush();
-            $this->addFlash('success', 'La recette a bien été mise à jour.');
+            
+            $this->addFlash('success', 'La recett e a bien été mise à jour.');
             return $this->redirectToRoute('admin.recipe.index');
         }
         return $this->render('admin/recipe/edit.html.twig', [
