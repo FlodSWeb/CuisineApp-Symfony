@@ -30,17 +30,26 @@ class RecipeController extends AbstractController
     //     ]);
     // }
 // Pagination
+// public function index(RecipeRepository $recipeRepository, Request $request): Response
+// {
+//     $page = $request->query->getInt('page', 1);
+//     $limit = 3;
+//     $recipes = $recipeRepository->paginateRecipes($page, $limit);
+//     // dd($recipes->count());
+//     $maxPage = ceil($recipes->count() / $limit);
+//     return $this->render('admin/recipe/index.html.twig', [
+//         'recipes' => $recipes,
+//         'maxPage' => $maxPage,
+//         'page' => $page
+//     ]);
+// }
+//KNP PAGINATOR
 public function index(RecipeRepository $recipeRepository, Request $request): Response
 {
     $page = $request->query->getInt('page', 1);
-    $limit = 3;
-    $recipes = $recipeRepository->paginateRecipes($page, $limit);
-    // dd($recipes->count());
-    $maxPage = ceil($recipes->count() / $limit);
+    $recipes = $recipeRepository->paginateRecipes($page);
     return $this->render('admin/recipe/index.html.twig', [
         'recipes' => $recipes,
-        'maxPage' => $maxPage,
-        'page' => $page
     ]);
 }
 
