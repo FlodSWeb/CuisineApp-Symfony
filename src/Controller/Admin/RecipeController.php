@@ -19,16 +19,30 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class RecipeController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(RecipeRepository $recipeRepository, CategoryRepository $categoryRepository, EntityManagerInterface $em): Response
-    {
-        // $this->denyAccessUnlessGranted('ROLE_USER'); géré par #[IsGranted('ROLE_USER')]
-        $recipes = $recipeRepository->findAll();
-        // $recipes[5]->getCategory()->getName();
-        // dd($recipes[5]->getCategory());
-        return $this->render('admin/recipe/index.html.twig', [
-            'recipes' => $recipes
-        ]);
-    }
+    // public function index(RecipeRepository $recipeRepository, CategoryRepository $categoryRepository, EntityManagerInterface $em): Response
+    // {
+    //     // $this->denyAccessUnlessGranted('ROLE_USER'); géré par #[IsGranted('ROLE_USER')]
+    //     $recipes = $recipeRepository->findAll();
+    //     // $recipes[5]->getCategory()->getName();
+    //     // dd($recipes[5]->getCategory());
+    //     return $this->render('admin/recipe/index.html.twig', [
+    //         'recipes' => $recipes
+    //     ]);
+    // }
+// Pagination
+public function index(RecipeRepository $recipeRepository, Request $request): Response
+{
+    $page = $request->query->getInt('page', 1);
+    $limit = 3;
+    $recipes = $recipeRepository->paginateRecipes($page, $limit);
+    // dd($recipes->count());
+    $maxPage = ceil($recipes->count() / $limit);
+    return $this->render('admin/recipe/index.html.twig', [
+        'recipes' => $recipes,
+        'maxPage' => $maxPage,
+        'page' => $page
+    ]);
+}
 
     #[Route('/new', name: 'new')]
     public function create(Request $request, EntityManagerInterface $em) {

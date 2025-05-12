@@ -37,5 +37,14 @@
 </table>
 
     <a href="{{ url('admin.recipe.new')}}" class="btn btn-warning">Ajouter une recette</a>
+
+    <div class="d-flex">
+        {% if page > 1 %}
+            <a href="{{ path('admin.recipe.index', {page: page - 1}) }}" class="btn btn-secondary  m-3">Page précédente</a>
+        {% endif %}
+         {% if page < maxPage %}
+            <a href="{{ path('admin.recipe.index', {page: page + 1}) }}" class="btn btn-secondary  m-3">Page suivante</a>
+        {% endif %}
+    </div>
     
 {% endblock %}
