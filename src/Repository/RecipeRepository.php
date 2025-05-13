@@ -55,19 +55,20 @@ class RecipeRepository extends ServiceEntityRepository
             ->andWhere('r.duration <= :duration')
             ->orderBy('r.duration', 'ASC')
             // ->setMaxResults(2)
-            ->setParameter('duration', $duration)   
+            ->setParameter('duration', $duration)
             ->getQuery()
             ->getResult();
     }
 
-    public function findTotalDuration() {
+    public function findTotalDuration()
+    {
         return $this->createQueryBuilder('r')
             ->select('SUM(r.duration)as totalDuration')
             // ->select('r.title, r.duration')
             // ->select('r.duration')
             ->getQuery()
             ->getResult();
-            // ->getSingleScalarResult(); mettre (int) sur le return
+        // ->getSingleScalarResult(); mettre (int) sur le return
     }
 
     //    /**

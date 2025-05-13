@@ -25,19 +25,20 @@ class Recipe
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Length(min: 4, groups : ['Extra'])]
-    #[BanWord(groups:['Extra'])]
-    #[Groups(['recipes.index'])]
+    #[Assert\Length(min: 4, groups: ['Extra'])]
+    #[BanWord(groups: ['Extra'])]
+    #[Groups(['recipes.index', 'recipes.create'])]
     private string $title = '';
-    
+
     #[ORM\Column(length: 255)]
     #[Assert\Length(min: 4)]
     #[Assert\Regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', message: 'Le slug doit contenir uniquement des lettres minuscules, des chiffres et des tirets.')]
+    #[Groups(['recipes.create'])]
     private string $slug = '';
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\Length(max: 5000)]
-    #[Groups(['recipes.show'])]
+    #[Groups(['recipes.show', 'recipes.create'])]
     private string $content = '';
 
     #[ORM\Column]
@@ -49,7 +50,7 @@ class Recipe
     #[ORM\Column(nullable: true)]
     // #[Assert\NotBlank(message: 'La durée est obligatoire.')]
     #[Assert\Positive(message: 'La durée doit être positive.')]
-    #[Groups(['recipes.index'])]
+    #[Groups(['recipes.index', 'recipes.create'])]
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'recipes', cascade: ['persist'])]
