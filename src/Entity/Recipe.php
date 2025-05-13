@@ -8,6 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -20,11 +21,13 @@ class Recipe
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['recipes.index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(min: 4, groups : ['Extra'])]
     #[BanWord(groups:['Extra'])]
+    #[Groups(['recipes.index'])]
     private string $title = '';
     
     #[ORM\Column(length: 255)]
@@ -34,6 +37,7 @@ class Recipe
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\Length(max: 5000)]
+    #[Groups(['recipes.show'])]
     private string $content = '';
 
     #[ORM\Column]
@@ -45,9 +49,11 @@ class Recipe
     #[ORM\Column(nullable: true)]
     // #[Assert\NotBlank(message: 'La durée est obligatoire.')]
     #[Assert\Positive(message: 'La durée doit être positive.')]
+    #[Groups(['recipes.index'])]
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'recipes', cascade: ['persist'])]
+    #[Groups(['recipes.show'])]
     private ?Category $category = null;
 
     #[ORM\Column(length: 255, nullable: true)]
