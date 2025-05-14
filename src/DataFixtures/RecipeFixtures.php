@@ -5,12 +5,13 @@ namespace App\DataFixtures;
 use App\Entity\Category;
 use App\Entity\Recipe;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use FakerRestaurant\Provider\fr_FR\Restaurant;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-class RecipeFixtures extends Fixture
+class RecipeFixtures extends Fixture implements DependentFixtureInterface
 {
 
     public function __construct(private readonly SluggerInterface $slugger) {}
@@ -20,14 +21,15 @@ class RecipeFixtures extends Fixture
         $faker = Factory::create('fr_FR');
         $faker->addProvider(new Restaurant($faker));
 
-        $categories = ['Plat chaud', 'Dessert', 'Entrée', 'Snack'];
-        foreach ($categories as $category) {
+        $categories = ['Plat principal', 'Dessert', 'Entrée', 'Snack'];
+        foreach ($categories as $c) {
             $category = (new Category())
-                ->setName($category)
-                ->setSlug($this->slugger->slug($category))
-                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($faker->fateTime()))
-                ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->fateTime()));
+                ->setName($c)
+                ->setSlug($this->slugger->slug($c))
+                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($faker->dateTime()))
+                ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTime()));
             $manager->persist($category);
+            $this->addReference($c, $category);
         }
 
         for ($i = 1; $i <= 10; $i++) {
@@ -35,14 +37,21 @@ class RecipeFixtures extends Fixture
             $recipe = (new Recipe())
                 ->setTitle($title)
                 ->setSlug($this->slugger->slug($title))
-                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($faker->fateTime()))
-                ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->fateTime()))
+                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($faker->dateTime()))
+                ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTime()))
                 ->setContent($faker->paragraphs(10, true))
+                ->setCategory($this->getReference($faker->randomElement($categories)))
+                ->setUser($this->getReference('USER' . $faker->numberBetween(1, 10)))
                 ->setDuration($faker->numberBetween(5, 60));
 
             $manager->persist($recipe);
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [UserFixtures::class];
     }
 }

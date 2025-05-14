@@ -29,32 +29,33 @@ class RecipeController extends AbstractController
     //         'recipes' => $recipes
     //     ]);
     // }
-// Pagination
-// public function index(RecipeRepository $recipeRepository, Request $request): Response
-// {
-//     $page = $request->query->getInt('page', 1);
-//     $limit = 3;
-//     $recipes = $recipeRepository->paginateRecipes($page, $limit);
-//     // dd($recipes->count());
-//     $maxPage = ceil($recipes->count() / $limit);
-//     return $this->render('admin/recipe/index.html.twig', [
-//         'recipes' => $recipes,
-//         'maxPage' => $maxPage,
-//         'page' => $page
-//     ]);
-// }
-//KNP PAGINATOR
-public function index(RecipeRepository $recipeRepository, Request $request): Response
-{
-    $page = $request->query->getInt('page', 1);
-    $recipes = $recipeRepository->paginateRecipes($page);
-    return $this->render('admin/recipe/index.html.twig', [
-        'recipes' => $recipes,
-    ]);
-}
+    // Pagination
+    // public function index(RecipeRepository $recipeRepository, Request $request): Response
+    // {
+    //     $page = $request->query->getInt('page', 1);
+    //     $limit = 3;
+    //     $recipes = $recipeRepository->paginateRecipes($page, $limit);
+    //     // dd($recipes->count());
+    //     $maxPage = ceil($recipes->count() / $limit);
+    //     return $this->render('admin/recipe/index.html.twig', [
+    //         'recipes' => $recipes,
+    //         'maxPage' => $maxPage,
+    //         'page' => $page
+    //     ]);
+    // }
+    //KNP PAGINATOR
+    public function index(RecipeRepository $recipeRepository, Request $request): Response
+    {
+        $page = $request->query->getInt('page', 1);
+        $recipes = $recipeRepository->paginateRecipes($page);
+        return $this->render('admin/recipe/index.html.twig', [
+            'recipes' => $recipes,
+        ]);
+    }
 
     #[Route('/new', name: 'new')]
-    public function create(Request $request, EntityManagerInterface $em) {
+    public function create(Request $request, EntityManagerInterface $em)
+    {
         $recipe = new Recipe();
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
@@ -87,24 +88,27 @@ public function index(RecipeRepository $recipeRepository, Request $request): Res
         ]);
     }
 
-        // URL : http://localhost:8000/recette/hamburger-bacon-37
-        // dd($request);
-        // dd($request->attributes->get('slug'), $request->attributes->getInt('id'));
-        // dd($slug, $id);
+    // URL : http://localhost:8000/recette/hamburger-bacon-37
+    // dd($request);
+    // dd($request->attributes->get('slug'), $request->attributes->getInt('id'));
+    // dd($slug, $id);
 
-        // return new Response('Recette ' . $slug);
-        
-        // format JSON
-        // return new JsonResponse([
-        //      $this->json(['slug' => $slug]),
-        //     'slug' => $slug
-        // ]);
+    // return new Response('Recette ' . $slug);
+
+    // format JSON
+    // return new JsonResponse([
+    //      $this->json(['slug' => $slug]),
+    //     'slug' => $slug
+    // ]);
     // }
-       
+
 
     #[Route('/{id}', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
-    public function edit(Recipe $recipe, Request $request, EntityManagerInterface $em) {
-        $form = $this->createForm(RecipeType::class, $recipe);
+    public function edit(Recipe $recipe, Request $request, EntityManagerInterface $em)
+    {
+        $form = $this->createForm(RecipeType::class, $recipe, [
+            'is_edit' => true
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Sans VichUploaderBundle
@@ -114,20 +118,21 @@ public function index(RecipeRepository $recipeRepository, Request $request): Res
             // $file->move($this->getParameter('kernel.project_dir') . '/public/recipes/images', $fileName);
             // $recipe->setThumbnail($fileName);
             // $em->flush();
-            
+
             $em->flush();
-            
+
             $this->addFlash('success', 'La recett e a bien été mise à jour.');
             return $this->redirectToRoute('admin.recipe.index');
         }
         return $this->render('admin/recipe/edit.html.twig', [
             'recipe' => $recipe,
-            'form' => $form
+            'form' => $form,
         ]);
     }
 
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::DIGITS])]
-    public function remove(Recipe $recipe, EntityManagerInterface $em) {
+    public function remove(Recipe $recipe, EntityManagerInterface $em)
+    {
         // dd($recipe);
         $em->remove($recipe);
         $em->flush();

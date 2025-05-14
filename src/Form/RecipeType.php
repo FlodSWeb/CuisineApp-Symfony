@@ -18,13 +18,12 @@ use Symfony\Component\Validator\Constraints\Image;
 class RecipeType extends AbstractType
 {
 
-    public function __construct(private FormListenerFactory $formListenerFactory)
-    {
-
-    }
+    public function __construct(private FormListenerFactory $formListenerFactory) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $label = $options['is_edit'] ? 'Modifier' : 'Créer';
+
         $builder
             ->add('title', TextType::class, [
                 'empty_data' => '',
@@ -59,7 +58,7 @@ class RecipeType extends AbstractType
                 'label' => 'Durée'
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'Envoyer',
+                'label' => $label,
             ])
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->autoSlug('title'))
             ->addEventListener(FormEvents::POST_SUBMIT, $this->formListenerFactory->timestamps())
@@ -69,7 +68,8 @@ class RecipeType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Recipe::class,
-            'validation_groups' => ['default', 'Extra']
+            'validation_groups' => ['default', 'Extra'],
+            'is_edit' => false
         ]);
     }
 }
