@@ -4,10 +4,12 @@
 
 {% block body %}
 
+    {% if categories is not empty %}
     <p>
         <a class="btn btn-warning" href="{{ path('admin.category.new') }}">Ajouter une catégorie</a>
     </p>
     
+
     <table class="table">
         <thead>
             <tr>
@@ -37,4 +39,8 @@
         </tbody>
     </table>
 
+    {% else %}
+        <div>Il n'y a pas de catégorie.</div>
+        <a class="btn btn-warning mt-4" href="{{ path('admin.category.new') }}">Ajouter une catégorie</a>
+    {% endif %}
 {% endblock %}

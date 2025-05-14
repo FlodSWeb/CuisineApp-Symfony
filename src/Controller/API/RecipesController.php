@@ -24,7 +24,7 @@ class RecipesController extends AbstractController
     {
         // $recipes = $repository->findAll();
         // $recipes = $repository->paginateRecipes($request->query->getInt('page', 1));
-        $recipes = $repository->paginateRecipes($paginationDTO?->page); //avec query parameter ?page=int dans l'url sinon erreur
+        $recipes = $repository->paginateRecipes($paginationDTO?->page); //avec query parameter ?page='page' dans l'url sinon erreur
         // dd($serializer->serialize($recipes, 'yaml', [
         //     'groups' => ['recipes.index']
         // ]));

@@ -5,6 +5,7 @@
 {% block body %}
     <h1>Recettes</h1>
 
+    {% if recipes is not empty %}
 <table class="table">
     <thead>
     <tr>
@@ -53,5 +54,10 @@
     <div class="my-3">
         {{ knp_pagination_render(recipes) }}
     </div>
+
+    {% else %}
+        <div>Il n'y pas de recette.</div>
+    <a href="{{ url('admin.recipe.new')}}" class="btn btn-warning mt-4">Ajouter une recette</a>
+    {% endif %}
     
 {% endblock %}
